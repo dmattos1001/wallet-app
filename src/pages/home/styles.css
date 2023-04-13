@@ -127,3 +127,46 @@ td.center {
 td {
   color: #7c7c7c;
 }
+
+.modal-background {
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(1, 4, 0, 0.2);
+}
+
+.modal-content {
+  height: 100vh;
+  width: 480px;
+  background-color: #f4f4f9;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.modal-content-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-button {
+  margin-top: 14px;
+  background-color: #5936cd;
+  height: 60px;
+  width: 432px;
+  border-radius: 12px;
+  color: #f4f4f9;
+  font-weight: bold;
+  font-size: 16px;
+  border: 2px solid #5936cd;
+  cursor: pointer;
+}

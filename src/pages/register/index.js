@@ -1,4 +1,4 @@
-const onCallRegiste = async (email, name) => {
+const onCallRegister = async (email, name) => {
   try {
     const data = {
       email,
