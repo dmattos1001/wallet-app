@@ -1,3 +1,23 @@
+const onLogout = () => {
+  localStorage.clear();
+  window.open("../../../index.html", "_self");
+};
+
+const onDeleteItem = async (id) => {
+  try {
+    const email = localStorage.getItem("@WalletApp:userEmail");
+    await fetch(`https://mp-wallet-app-api.herokuapp.com/finances/${id}`, {
+      method: "DELETE",
+      headers: {
+        email: email,
+      },
+    });
+    onLoadFinancesData();
+  } catch (error) {
+    alert("Erro ao deletar item");
+  }
+};
+
 const renderFinancesList = (data) => {
   const table = document.getElementById("finances-table");
   table.innerHTML = "";
@@ -67,6 +87,8 @@ const renderFinancesList = (data) => {
 
     // delete
     const deleteTd = document.createElement("td");
+    deleteTd.style.cursor = "pointer";
+    deleteTd.onclick = () => onDeleteItem(item.id);
     const deleteText = document.createTextNode("Deletar");
     deleteTd.appendChild(deleteText);
     tableRow.appendChild(deleteTd);
@@ -150,10 +172,10 @@ const renderFinanceElements = (data) => {
 
 const onLoadFinancesData = async () => {
   try {
-    const date = "2022-12-15";
+    const dateInputValue = document.getElementById("select-date").value;
     const email = localStorage.getItem("@WalletApp:userEmail");
     const result = await fetch(
-      `https://mp-wallet-app-api.herokuapp.com/finances?date=${date}`,
+      `https://mp-wallet-app-api.herokuapp.com/finances?date=${dateInputValue}`,
       {
         method: "GET",
         headers: {
@@ -185,6 +207,8 @@ const onLoadUserInfo = () => {
 
   // add logout link
   const logoutElement = document.createElement("a");
+  logoutElement.onclick = () => onLogout();
+  logoutElement.style.cursor = "pointer";
   const logoutText = document.createTextNode("sair");
   logoutElement.appendChild(logoutText);
   navBarUserInfo.appendChild(logoutElement);
@@ -273,7 +297,17 @@ const onCreateFinanceRelease = async (target) => {
   }
 };
 
+const setInitialDate = () => {
+  const dateInput = document.getElementById("select-date");
+  const nowDate = new Date().toISOString().split("T")[0];
+  dateInput.value = nowDate;
+  dateInput.addEventListener("change", () => {
+    onLoadFinancesData();
+  });
+};
+
 window.onload = () => {
+  setInitialDate();
   onLoadUserInfo();
   onLoadFinancesData();
   OnLoadCategories();
@@ -281,7 +315,6 @@ window.onload = () => {
   const form = document.getElementById("form-finance-release");
   form.onsubmit = (event) => {
     event.preventDefault();
-
     onCreateFinanceRelease(event.target);
   };
 };
